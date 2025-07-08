@@ -18,49 +18,28 @@ public class FruitController {
 
     @PostMapping("/add")
     public ResponseEntity<Fruit> addFruit(@RequestBody Fruit fruit) {
-        Fruit addedFruit = fruitService.addFruit(fruit);
-        return ResponseEntity.status(HttpStatus.CREATED).body(addedFruit);
+        return ResponseEntity.status(HttpStatus.CREATED).body(fruitService.addFruit(fruit));
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Fruit> updateFruit(@PathVariable int id, @RequestBody Fruit fruit) {
-        Fruit existingFruit = fruitService.getFruitById(id);
-
-        if (existingFruit != null) {
-            fruit.setId(id);
-            Fruit updatedFruit = fruitService.updateFruit(fruit);
-            return ResponseEntity.ok(updatedFruit);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.ok(fruitService.updateFruit(id, fruit));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteFruit(@PathVariable int id) {
-        Fruit fruit = fruitService.getFruitById(id);
-
-        if (fruit != null) {
-            fruitService.deleteFruit(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        fruitService.deleteFruit(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Fruit> getOneFruit(@PathVariable int id) {
-        Fruit fruit = fruitService.getFruitById(id);
-
-        if (fruit != null) {
-            return ResponseEntity.ok(fruit);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.ok(fruitService.getFruitById(id));
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<Fruit>> getAllFruits() {
-        List<Fruit> fruits = (List<Fruit>) fruitService.getAllFruit();
+        List<Fruit> fruits = fruitService.getAllFruit();
         return fruits.isEmpty()
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.ok(fruits);
